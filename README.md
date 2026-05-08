@@ -1,66 +1,66 @@
 # ContextWordlist v1.1
 
-**Professional Contextual Wordlist Generator for Advanced Pentesting**
+**Generador profesional de wordlists contextuales para pentesting avanzado**
 
-Generate highly-targeted password dictionaries based on real target intelligence. Combines contextual data with advanced mutation strategies to create wordlists that crack passwords **10-100x faster** than generic dictionaries.
+Genera diccionarios de contraseñas altamente dirigidos a partir de inteligencia real sobre el objetivo. Combina datos contextuales con estrategias avanzadas de mutación para crear wordlists que pueden probar contraseñas **10-100 veces más rápido** que los diccionarios genéricos.
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Production--Ready-brightgreen)](.)
 
-> **⚠️ LEGAL WARNING**: This tool is for authorized security testing only. Unauthorized access to computer systems is illegal. See [Legal Disclaimer](#-legal-disclaimer--terms-of-use) below.
+> **⚠️ ADVERTENCIA LEGAL**: Esta herramienta es solo para pruebas de seguridad autorizadas. El acceso no autorizado a sistemas informáticos es ilegal. Consulta la sección de [Seguridad y ética](#-seguridad-y-ética) más abajo.
 
 ---
 
-## 🎯 What Does It Do?
+## 🎯 ¿Qué hace?
 
-Imagine you're testing a company's security. Instead of using a **generic list of 14 million random passwords** that takes WEEKS to test, ContextWordlist generates a **smart, targeted list of 6,000-50,000 passwords** that the actual user might use based on their real information.
+Imagina que estás evaluando la seguridad de una empresa. En lugar de usar una **lista genérica de 14 millones de contraseñas aleatorias** que puede tardar SEMANAS en probarse, ContextWordlist genera una **lista inteligente y dirigida de 6.000 a 50.000 contraseñas** que un usuario real podría usar basándose en su información contextual.
 
-### Real Example:
-- **CEO Name**: John Smith
-- **Company**: TechCorp Inc
-- **Founded**: 2015
-- **His Birth Year**: 1980
+### Ejemplo real:
+- **Nombre del CEO**: John Smith
+- **Empresa**: TechCorp Inc
+- **Año de fundación**: 2015
+- **Año de nacimiento**: 1980
 
-**ContextWordlist generates passwords like:**
+**ContextWordlist genera contraseñas como:**
 ```
-john2015          (name + company founding year)
-john_techcorp     (name + company)
-John2024!         (capitalized + current year + special char)
-j0hn_t3chc0rp     (leet speak variation)
-TechCorp1980      (company + birth year)
-...and 6,750 more smart variations!
+john2015          (nombre + año de fundación de la empresa)
+john_techcorp     (nombre + empresa)
+John2024!         (capitalizada + año actual + carácter especial)
+j0hn_t3chc0rp     (variación leet speak)
+TechCorp1980      (empresa + año de nacimiento)
+...¡y 6.750 variaciones inteligentes más!
 ```
 
-**Result**: Cracks in **MINUTES** instead of WEEKS. That's the power.
+**Resultado**: pruebas en **MINUTOS** en lugar de SEMANAS. Ese es el poder del contexto.
 
 ---
 
-## 🎯 Features
+## 🎯 Características
 
-### Core Capabilities
-- **Context-Aware Generation**: Combines personal data, company info, and custom patterns
-- **Advanced Leet Speak**: Multi-character substitutions (not just single replacements)
-- **Intelligent Mutations**: Year suffixes, seasonal patterns, capitalization variants
-- **Combination Engine**: Smart person + company + date combinations
+### Capacidades principales
+- **Generación sensible al contexto**: combina datos personales, información de empresa y patrones personalizados.
+- **Leet speak avanzado**: sustituciones de varios caracteres, no solo reemplazos simples.
+- **Mutaciones inteligentes**: sufijos con años, patrones estacionales y variantes de capitalización.
+- **Motor de combinaciones**: combinaciones inteligentes de persona + empresa + fechas.
 
-### Professional Tools Integration
-- **Hashcat Masks** (New): Auto-generates 10+ context-aware masks for brute-force attacks
-- **Hashcat Rules** (New): Dynamic 50+ rules based on profile data
-- **Standard Wordlist**: Compatible with Hashcat, Hydra, John the Ripper, Medusa
-- **Piping Support**: Direct stdout output for tool integration
+### Integración con herramientas profesionales
+- **Máscaras de Hashcat** (nuevo): genera automáticamente más de 10 máscaras contextuales para ataques de fuerza bruta.
+- **Reglas de Hashcat** (nuevo): más de 50 reglas dinámicas basadas en los datos del perfil.
+- **Wordlist estándar**: compatible con Hashcat, Hydra, John the Ripper y Medusa.
+- **Soporte para piping**: salida directa por stdout para integrarse con otras herramientas.
 
-### Analytics & Reporting
-- **HTML Dashboard**: Professional dark-themed report with statistics
-- **CSV Export**: Per-word entropy scoring and complexity analysis
-- **Full Logging**: Production-grade audit trails
-- **Deep Statistics**: Deduplication tracking, complexity metrics
+### Analítica y reportes
+- **Panel HTML**: reporte profesional con tema oscuro y estadísticas.
+- **Exportación CSV**: puntuación de entropía y análisis de complejidad por palabra.
+- **Logging completo**: trazabilidad de ejecución para auditorías.
+- **Estadísticas profundas**: seguimiento de deduplicación y métricas de complejidad.
 
 ---
 
-## 📋 Quick Start
+## 📋 Inicio rápido
 
-### Installation
+### Instalación
 
 **Linux/Kali:**
 ```bash
@@ -73,19 +73,19 @@ chmod +x setup.sh
 setup.bat
 ```
 
-Or manually:
+O manualmente:
 ```bash
 pip install rich
 ```
 
-### Basic Usage
+### Uso básico
 
-**Interactive Mode (Easiest):**
+**Modo interactivo (el más fácil):**
 ```bash
 python3 contextwordlist.py -i
 ```
 
-**Direct Command:**
+**Comando directo:**
 ```bash
 python3 contextwordlist.py \
   --name Juan \
@@ -96,16 +96,16 @@ python3 contextwordlist.py \
   --export all
 ```
 
-**From JSON Profile:**
+**Desde un perfil JSON:**
 ```bash
 python3 contextwordlist.py --profile target.json --export all
 ```
 
 ---
 
-## 🚀 Advanced Examples (For Experts)
+## 🚀 Ejemplos avanzados (para expertos)
 
-### Example 1: Internal Audit (IT Team)
+### Ejemplo 1: Auditoría interna (equipo de IT)
 ```bash
 python3 contextwordlist.py \
   --company "Acme Corp" \
@@ -115,7 +115,7 @@ python3 contextwordlist.py \
   --export all
 ```
 
-### Example 2: Red Team Engagement
+### Ejemplo 2: Ejercicio de Red Team
 ```bash
 python3 contextwordlist.py \
   --name Robert \
@@ -129,7 +129,7 @@ python3 contextwordlist.py \
   --export all
 ```
 
-### Example 3: Large-Scale GPU Attack (Experts Only)
+### Ejemplo 3: Ataque a gran escala con GPU (solo expertos)
 ```bash
 python3 contextwordlist.py \
   --name Juan \
@@ -140,7 +140,7 @@ python3 contextwordlist.py \
   --quiet | hashcat -m 0 -a 0 hashes.txt -
 ```
 
-### Example 4: Hybrid Hashcat Attack
+### Ejemplo 4: Ataque híbrido con Hashcat
 ```bash
 python3 contextwordlist.py --name Juan --export masks
 hashcat -m 1000 -a 3 hashes.txt -hm reports/masks_*.hcmask
@@ -148,66 +148,66 @@ hashcat -m 1000 -a 3 hashes.txt -hm reports/masks_*.hcmask
 
 ---
 
-## 📖 Command Reference
+## 📖 Referencia de comandos
 
-### Person Data
+### Datos personales
 ```bash
---name TEXT              First name
---lastname TEXT          Last name
---nickname TEXT          Nickname/alias
---birth-year YYYY        Birth year (1900-2050)
---birth-day DD           Birth day (01-31)
---birth-month MM         Birth month (01-12)
---partner TEXT           Partner/spouse name
---pet TEXT               Pet name
---child TEXT             Child name
---city TEXT              City
---country TEXT           Country
---hobby TEXT             Hobby/interest
+--name TEXT              Nombre
+--lastname TEXT          Apellido
+--nickname TEXT          Apodo/alias
+--birth-year YYYY        Año de nacimiento (1900-2050)
+--birth-day DD           Día de nacimiento (01-31)
+--birth-month MM         Mes de nacimiento (01-12)
+--partner TEXT           Nombre de pareja/cónyuge
+--pet TEXT               Nombre de mascota
+--child TEXT             Nombre de hijo/a
+--city TEXT              Ciudad
+--country TEXT           País
+--hobby TEXT             Hobby/interés
 ```
 
-### Company Data
+### Datos de empresa
 ```bash
---company TEXT           Company name
---company-short TEXT     Abbreviation (e.g., TN for TechNova)
---domain TEXT            Domain (e.g., company.com)
---industry TEXT          Industry sector
---founded YYYY           Founding year (1900-2050)
---product TEXT           Product name
+--company TEXT           Nombre de la empresa
+--company-short TEXT     Abreviatura (ej.: TN para TechNova)
+--domain TEXT            Dominio (ej.: company.com)
+--industry TEXT          Sector o industria
+--founded YYYY           Año de fundación (1900-2050)
+--product TEXT           Nombre del producto
 ```
 
-### Configuration
+### Configuración
 ```bash
---extra-words TEXT       Extra words (comma-separated)
---min-length N           Minimum word length (default: 6)
---max-length N           Maximum word length (default: 20)
---max-words N            Maximum wordlist size (default: 50000)
---leet-advanced          Enable advanced leet speak (multiple subs)
---no-leet                Disable leet speak
---no-seasons             Disable seasonal patterns
---no-combinations        Disable word combinations
+--extra-words TEXT       Palabras extra separadas por comas
+--min-length N           Longitud mínima (default: 6)
+--max-length N           Longitud máxima (default: 20)
+--max-words N            Tamaño máximo de la wordlist (default: 50000)
+--leet-advanced          Activa leet speak avanzado (múltiples sustituciones)
+--no-leet                Desactiva leet speak
+--no-seasons             Desactiva patrones estacionales
+--no-combinations        Desactiva combinaciones de palabras
 ```
 
-### Output Options
+### Opciones de salida
 ```bash
 --export FORMAT          txt, rules, masks, html, csv, all
---stdout                 Output to stdout (for piping)
---quiet                  Silent mode (no banner/tables)
---preview N              Preview first N words (default: 20)
+--stdout                 Envía la wordlist a stdout (útil para piping)
+--quiet                  Modo silencioso (sin banner ni tablas)
+--preview N              Cantidad de palabras a previsualizar (default: 20)
 ```
 
-### Profile Management
+### Gestión de perfiles
 ```bash
---profile FILE.json      Load profile from JSON file
--i, --interactive        Interactive mode (recommended)
+--profile FILE.json      Carga un perfil desde un archivo JSON
+-i, --interactive        Modo interactivo (recomendado)
 ```
 
 ---
 
-## 📊 Output Formats
+## 📊 Formatos de salida
 
 ### Wordlist (TXT)
-Standard one-word-per-line format, compatible with all major tools:
+Formato estándar de una palabra por línea, compatible con las principales herramientas:
 ```
 Juan2024
 juan_perez
@@ -216,8 +216,8 @@ juan@parez
 ...
 ```
 
-### Hashcat Masks (.hcmask)
-Auto-generated context-aware masks for brute-force:
+### Máscaras de Hashcat (.hcmask)
+Máscaras contextuales generadas automáticamente para fuerza bruta:
 ```
 Juan?d?d?d?d
 ?uJuan?d?d
@@ -226,8 +226,8 @@ Juan?d?d?d?d
 ...
 ```
 
-### Hashcat Rules (.rule)
-Dynamic mutation rules:
+### Reglas de Hashcat (.rule)
+Reglas dinámicas de mutación:
 ```
 c
 u
@@ -239,16 +239,16 @@ c$2$0$2$4
 ...
 ```
 
-### HTML Report (.html)
-Professional dashboard with:
-- Key statistics (total words, base words, etc.)
-- Mutation breakdown with percentages
-- 100-word preview with complexity badges
-- Hashcat usage instructions
-- Dark cybersecurity theme
+### Reporte HTML (.html)
+Panel profesional con:
+- Estadísticas clave (total de palabras, palabras base, etc.).
+- Desglose de mutaciones con porcentajes.
+- Previsualización de 100 palabras con indicadores de complejidad.
+- Instrucciones de uso con Hashcat.
+- Tema oscuro estilo ciberseguridad.
 
-### CSV Export (.csv)
-Analytical data with entropy scoring:
+### Exportación CSV (.csv)
+Datos analíticos con puntuación de entropía:
 ```
 word,length,has_uppercase,has_digit,has_special,has_leet,entropy_score
 Juan2024,8,1,1,0,0,2
@@ -259,17 +259,17 @@ JUAN_TECN,9,1,0,1,0,2
 
 ---
 
-## 🎓 Pentesting Strategy
+## 🎓 Estrategia de pentesting
 
-### Phase 1: Intelligence Gathering
-- Company founding date
-- Employee names (from LinkedIn, Twitter)
-- Company location, industry, products
-- Public breaches (check HIBP, Dehashed)
+### Fase 1: Recolección de inteligencia
+- Fecha de fundación de la empresa.
+- Nombres de empleados (desde LinkedIn, Twitter, etc.).
+- Ubicación de la empresa, industria y productos.
+- Brechas públicas (revisar HIBP, Dehashed).
 
-### Phase 2: Profile Creation
+### Fase 2: Creación del perfil
 ```bash
-# Save reusable profiles as JSON
+# Guarda perfiles reutilizables como JSON
 cat > targets/cto_john_smith.json << 'EOF'
 {
   "first_name": "John",
@@ -282,41 +282,41 @@ cat > targets/cto_john_smith.json << 'EOF'
 EOF
 ```
 
-### Phase 3: Attack Execution
+### Fase 3: Ejecución del ataque
 ```bash
-# Start with basic dictionary (fastest)
+# Empieza con diccionario básico (lo más rápido)
 hashcat -m 1000 -a 0 hashes.txt wordlist.txt
 
-# Apply rules (more variants)
+# Aplica reglas (más variantes)
 hashcat -m 1000 -a 0 hashes.txt wordlist.txt -r rules.rule
 
-# Use masks (GPU-optimized)
+# Usa máscaras (optimizado para GPU)
 hashcat -m 1000 -a 3 hashes.txt -hm masks.hcmask
 ```
 
-### Phase 4: Analysis & Reporting
-- Review HTML report for statistics
-- Analyze cracked passwords in CSV export
-- Document findings for management
+### Fase 4: Análisis y reporte
+- Revisa el reporte HTML para ver estadísticas.
+- Analiza contraseñas recuperadas en la exportación CSV.
+- Documenta hallazgos para la dirección o el cliente.
 
 ---
 
-## 🔧 Advanced Usage
+## 🔧 Uso avanzado
 
-### Piping to Tools
+### Piping hacia otras herramientas
 ```bash
-# Hashcat direct pipe
+# Pipe directo a Hashcat
 python3 contextwordlist.py --name Juan --export txt --quiet | \
   hashcat -m 0 -a 0 hashes.txt -
 
-# Hydra SSH brute-force
+# Fuerza bruta SSH con Hydra
 python3 contextwordlist.py --name Juan --export txt --quiet | \
   hydra -l admin -P - ssh://target.com
 ```
 
-### Large-Scale Wordlists
+### Wordlists a gran escala
 ```bash
-# Generate 200,000+ word list
+# Generar una lista de más de 200.000 palabras
 python3 contextwordlist.py \
   --name Juan \
   --company TechNova \
@@ -324,13 +324,13 @@ python3 contextwordlist.py \
   --leet-advanced \
   --export txt
 
-# Compress for storage
+# Comprimir para almacenamiento
 gzip reports/wordlist_*.txt
 ```
 
-### Batch Processing
+### Procesamiento por lotes
 ```bash
-# Process multiple targets
+# Procesar varios objetivos
 for profile in targets/*.json; do
   python3 contextwordlist.py --profile "$profile" --export all
 done
@@ -338,191 +338,191 @@ done
 
 ---
 
-## 📁 Project Structure
+## 📁 Estructura del proyecto
 
 ```
 ContextWordlist/
-├── contextwordlist.py         # Main application
-├── setup.sh                   # Linux/Kali setup
-├── setup.bat                  # Windows setup
-├── run.bat                    # Windows launcher
-├── README.md                  # This file
-├── .gitignore                 # Git configuration
-├── reports/                   # Generated wordlists & reports
-│   ├── wordlist_*.txt         # Standard wordlists
-│   ├── masks_*.hcmask         # Hashcat masks
-│   ├── rules_*.rule           # Hashcat rules
-│   ├── report_*.html          # HTML dashboards
-│   └── wordlist_*.csv         # CSV analytics
-└── targets/                   # (Optional) Profile templates
-    └── example.json           # Example JSON profile
+├── contextwordlist.py         # Aplicación principal
+├── setup.sh                   # Instalación en Linux/Kali
+├── setup.bat                  # Instalación en Windows
+├── run.bat                    # Lanzador para Windows
+├── README.md                  # Este archivo
+├── .gitignore                 # Configuración de Git
+├── reports/                   # Wordlists y reportes generados
+│   ├── wordlist_*.txt         # Wordlists estándar
+│   ├── masks_*.hcmask         # Máscaras de Hashcat
+│   ├── rules_*.rule           # Reglas de Hashcat
+│   ├── report_*.html          # Paneles HTML
+│   └── wordlist_*.csv         # Analítica CSV
+└── targets/                   # (Opcional) Plantillas de perfiles
+    └── example.json           # Perfil JSON de ejemplo
 ```
 
 ---
 
-## 🔒 Security & Ethics
+## 🔒 Seguridad y ética
 
-### Legal Considerations
-⚠️ **IMPORTANT**: Only use on systems you own or have explicit written authorization to test.
+### Consideraciones legales
+⚠️ **IMPORTANTE**: Usa esta herramienta únicamente en sistemas propios o en sistemas para los que tengas autorización explícita y por escrito.
 
-- ✅ Requires written authorization (Red Team engagement letter)
-- ✅ Target must be in-scope
-- ✅ Document all activities
-- ✅ Delete data after engagement (unless retained per contract)
-- ✅ Comply with GDPR, CCPA, and local data protection laws
+- ✅ Requiere autorización escrita (por ejemplo, carta de alcance de Red Team).
+- ✅ El objetivo debe estar dentro del alcance autorizado.
+- ✅ Documenta todas las actividades.
+- ✅ Elimina los datos después del ejercicio, salvo que el contrato indique lo contrario.
+- ✅ Cumple con GDPR, CCPA y leyes locales de protección de datos.
 
-### Responsible Use
-This tool is designed for:
-- ✅ Authorized penetration testing
-- ✅ Internal security audits
-- ✅ Password policy assessment
-- ✅ Compliance testing
+### Uso responsable
+Esta herramienta está diseñada para:
+- ✅ Pruebas de penetración autorizadas.
+- ✅ Auditorías internas de seguridad.
+- ✅ Evaluación de políticas de contraseñas.
+- ✅ Pruebas de cumplimiento.
 
-**NOT for:**
-- ❌ Unauthorized access
-- ❌ Credential theft
-- ❌ Illegal hacking
-- ❌ Social engineering
-
----
-
-## 📊 Performance
-
-### Generation Speed
-| Profile | Time | Words |
-|---------|------|-------|
-| Simple (name only) | 2s | 2,200 |
-| Medium (name + company + dates) | 3s | 6,757 |
-| Complex (20 fields) | 5s | 50,000+ |
-
-### Attack Efficiency (NVIDIA RTX 3090)
-| Attack | Words | Speed | Time to 50% Crack |
-|--------|-------|-------|-------------------|
-| Generic dict | 14M (RockYou) | 12.5 GH/s | 2-4 weeks |
-| ContextWordlist only | 6,757 | 12.5 GH/s | 2-10 min |
-| + Rules (50×) | 337,850 | 12.5 GH/s | 2-5 hours |
-| + Masks (10×) | 10^6 | 12.5 GH/s | 1-3 hours |
-
-**Result: 100-1000x faster than generic approaches**
+**NO es para:**
+- ❌ Acceso no autorizado.
+- ❌ Robo de credenciales.
+- ❌ Hackeo ilegal.
+- ❌ Ingeniería social.
 
 ---
 
-## 🐛 Troubleshooting
+## 📊 Rendimiento
 
-### No cracks with the wordlist?
+### Velocidad de generación
+| Perfil | Tiempo | Palabras |
+|--------|--------|----------|
+| Simple (solo nombre) | 2s | 2.200 |
+| Medio (nombre + empresa + fechas) | 3s | 6.757 |
+| Complejo (20 campos) | 5s | 50.000+ |
+
+### Eficiencia de ataque (NVIDIA RTX 3090)
+| Ataque | Palabras | Velocidad | Tiempo hasta recuperar 50% |
+|--------|----------|-----------|----------------------------|
+| Diccionario genérico | 14M (RockYou) | 12.5 GH/s | 2-4 semanas |
+| Solo ContextWordlist | 6.757 | 12.5 GH/s | 2-10 min |
+| + Reglas (50×) | 337.850 | 12.5 GH/s | 2-5 horas |
+| + Máscaras (10×) | 10^6 | 12.5 GH/s | 1-3 horas |
+
+**Resultado: 100-1000 veces más rápido que los enfoques genéricos**
+
+---
+
+## 🐛 Solución de problemas
+
+### ¿No se recupera ninguna contraseña con la wordlist?
 ```bash
-# 1. Verify hash format
+# 1. Verifica el formato del hash
 hashcat -m 1000 hashes.txt --show | head
 
-# 2. Test with known password
+# 2. Prueba con una contraseña conocida
 echo "password123" | hashcat -m 1000 -a 0 hashes.txt
 
-# 3. Add more profile data
+# 3. Agrega más datos al perfil
 python3 contextwordlist.py --name Juan --extra-words "hobby,city" --export all
 
-# 4. Increase wordlist size
+# 4. Aumenta el tamaño de la wordlist
 python3 contextwordlist.py --name Juan --max-words 100000 --export all
 ```
 
-### Wordlist too large?
+### ¿La wordlist es demasiado grande?
 ```bash
-# Reduce combinations
+# Reduce combinaciones
 python3 contextwordlist.py --name Juan --no-combinations --export txt
 
-# Reduce length range
+# Reduce el rango de longitud
 python3 contextwordlist.py --name Juan --min-length 8 --max-length 16
 
-# Limit max words
+# Limita el máximo de palabras
 python3 contextwordlist.py --name Juan --max-words 10000 --export txt
 ```
 
-### Hashcat not finding hashes?
+### ¿Hashcat no encuentra los hashes?
 ```bash
-# Check hash format
-hashcat --help | grep "m 0 ="  # Hash mode documentation
+# Revisa el formato del hash
+hashcat --help | grep "m 0 ="  # Documentación de modos de hash
 
-# Verify hashes are correct format
-cat hashes.txt | head  # First hash
+# Verifica que los hashes tengan el formato correcto
+cat hashes.txt | head  # Primer hash
 hashcat -m 1000 -a 0 hashes.txt wordlist.txt --status
 ```
 
 ---
 
-## 📚 Logs & Debugging
+## 📚 Logs y depuración
 
-Full execution logs are saved to `contextwordlist.log`:
+Los logs completos de ejecución se guardan en `contextwordlist.log`:
 ```bash
-# View logs in real-time
+# Ver logs en tiempo real
 tail -f contextwordlist.log
 
-# Search for errors
+# Buscar errores
 grep ERROR contextwordlist.log
 
-# See statistics
+# Ver estadísticas
 grep INFO contextwordlist.log | tail -10
 ```
 
 ---
 
-## 🤝 Contributing
+## 🤝 Contribuir
 
-Improvements and bug reports are welcome! Please:
-1. Test thoroughly
-2. Document changes
-3. Maintain backward compatibility
-4. Follow Python conventions (PEP 8)
-
----
-
-## 📝 License
-
-This project is provided for authorized security testing only. Users are responsible for ensuring they have explicit authorization before using this tool on any system.
+¡Las mejoras y reportes de errores son bienvenidos! Por favor:
+1. Prueba los cambios con cuidado.
+2. Documenta los cambios.
+3. Mantén compatibilidad hacia atrás.
+4. Sigue las convenciones de Python (PEP 8).
 
 ---
 
-## 🙏 Support
+## 📝 Licencia
 
-### Documentation
-- Review `README.md` (this file)
-- Check `contextwordlist.log` for debugging
-- Use `--help` flag for command reference
-
-### Common Issues
-See **Troubleshooting** section above.
-
-### Version History
-- **v1.1** (May 2026): Professional edition with Hashcat masks, dynamic rules, advanced analytics
-- **v1.0** (Original): Basic wordlist generation
+Este proyecto se proporciona únicamente para pruebas de seguridad autorizadas. Las personas usuarias son responsables de asegurarse de contar con autorización explícita antes de usar esta herramienta sobre cualquier sistema.
 
 ---
 
-## 🚀 Quick Commands Cheat Sheet
+## 🙏 Soporte
+
+### Documentación
+- Revisa `README.md` (este archivo).
+- Consulta `contextwordlist.log` para depuración.
+- Usa la opción `--help` para ver la referencia de comandos.
+
+### Problemas comunes
+Consulta la sección **Solución de problemas** más arriba.
+
+### Historial de versiones
+- **v1.1** (mayo de 2026): edición profesional con máscaras de Hashcat, reglas dinámicas y analítica avanzada.
+- **v1.0** (original): generación básica de wordlists.
+
+---
+
+## 🚀 Hoja rápida de comandos
 
 ```bash
-# Interactive mode
+# Modo interactivo
 python3 contextwordlist.py -i
 
-# Generate & export everything
+# Generar y exportar todo
 python3 contextwordlist.py --name Juan --company TechNova --export all
 
-# Generate Hashcat masks only
+# Generar solo máscaras de Hashcat
 python3 contextwordlist.py --name Juan --export masks
 
-# Large wordlist for GPU
+# Wordlist grande para GPU
 python3 contextwordlist.py --name Juan --max-words 200000 --export txt
 
-# Pipe to Hashcat
+# Pipe hacia Hashcat
 python3 contextwordlist.py --name Juan --export txt --quiet | hashcat -m 0 -a 0 hashes.txt -
 
-# From JSON profile
+# Desde un perfil JSON
 python3 contextwordlist.py --profile target.json --export all
 
-# Help & flags
+# Ayuda y flags
 python3 contextwordlist.py --help
 ```
 
 ---
 
-**ContextWordlist v1.1** — Making password testing faster, smarter, and more professional.
+**ContextWordlist v1.1** — Hace que las pruebas de contraseñas sean más rápidas, inteligentes y profesionales.
 
-*Last Updated: May 8, 2026*
+*Última actualización: 8 de mayo de 2026*
