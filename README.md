@@ -2,6 +2,8 @@
 
 **Generador profesional de wordlists contextuales para pentesting avanzado**
 
+**Idioma:** Español | [English](README_EN.md)
+
 Genera diccionarios de contraseñas altamente dirigidos a partir de inteligencia real sobre el objetivo. Combina datos contextuales con estrategias avanzadas de mutación para crear wordlists que pueden probar contraseñas **10-100 veces más rápido** que los diccionarios genéricos.
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)

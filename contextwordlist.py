@@ -27,9 +27,9 @@ try:
     from rich.columns import Columns
     from rich import print as rprint
 except ImportError:
-    print("ERROR: La librería 'rich' no está instalada.")
-    print("Por favor, ejecuta setup.sh (Linux) o setup.bat (Windows).")
-    print("O instala manualmente: pip install rich")
+    print("ERROR: The 'rich' library is not installed.")
+    print("Please run setup.sh (Linux) or setup.bat (Windows).")
+    print("Or install it manually: pip install rich")
     sys.exit(1)
 
 # ==========================================
@@ -46,7 +46,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ==========================================
-# CONSTANTES & MAPEOS
+# CONSTANTS & MAPPINGS
 # ==========================================
 LEET_MAP = {
     'a': ['4', '@', '/-\\'], 
@@ -63,7 +63,7 @@ LEET_MAP = {
     'x': ['><']
 }
 
-# Más mutaciones avanzadas para contextos empresariales
+# More advanced mutations for business contexts
 SPECIAL_SUFFIXES = [
     "!", "@", "#", ".", "*", "1", "12", "123", "1234", "12345",
     "01", "007", "000", "#1", "@1", "_1", "!1", "!123", "@123", "#123",
@@ -87,7 +87,7 @@ LOGS_DIR = Path(__file__).parent / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
 
 # ==========================================
-# MODELOS DE DATOS
+# DATA MODELS
 # ==========================================
 @dataclass
 class Profile:
@@ -116,10 +116,10 @@ class Profile:
     max_length:    int = 20
     current_year:  int = 2026
     leet_enabled:  bool = True
-    leet_advanced: bool = True  # Múltiples sustituciones
+    leet_advanced: bool = True  # Multiple substitutions
     seasons_enabled: bool = True
     combinations_enabled: bool = True
-    max_words:     int = 50000  # Límite más alto y configurable
+    max_words:     int = 50000  # Higher configurable limit
     dedup_strategy: str = "aggressive"  # aggressive, balanced, loose
 
 @dataclass
@@ -135,7 +135,7 @@ class WordlistResult:
     mutations_applied: dict = field(default_factory=dict)
 
 # ==========================================
-# ENGINE: EXTRACCIÓN Y MUTACIÓN AVANZADA
+# ENGINE: ADVANCED EXTRACTION AND MUTATION
 # ==========================================
 class WordlistEngine:
     def __init__(self, profile: Profile):
@@ -145,7 +145,7 @@ class WordlistEngine:
         logger.info(f"Engine initialized with profile: {profile.company or profile.first_name}")
 
     def _normalize(self, text: str) -> str:
-        """Normaliza texto removiendo acentos y caracteres especiales"""
+        """Normalize text by removing accents and special characters."""
         if not text: 
             return ""
         text = str(text).strip()
@@ -153,7 +153,7 @@ class WordlistEngine:
         return text.lower()
 
     def _validate_input(self, value, field_type=str):
-        """Valida inputs según tipo"""
+        """Validate inputs by type."""
         if not value:
             return None
         if field_type == int:
@@ -168,7 +168,7 @@ class WordlistEngine:
         return self._normalize(str(value)) if value else None
 
     def _extract_base_words(self) -> list:
-        """Extrae palabras base del perfil con mejor validación"""
+        """Extract base words from the profile with improved validation."""
         p = self.profile
         words = []
         
@@ -182,7 +182,7 @@ class WordlistEngine:
         ln = self._validate_input(p.last_name)
         comp = self._validate_input(p.company)
         
-        # Datos personales
+        # Personal data
         add_w(fn)
         add_w(ln)
         add_w(p.nickname)
@@ -210,7 +210,7 @@ class WordlistEngine:
         add_w(p.country)
         add_w(p.hobby)
         
-        # Datos empresariales
+        # Company data
         add_w(comp)
         if p.company_short:
             add_w(p.company_short)
@@ -227,7 +227,7 @@ class WordlistEngine:
             add_w(str(p.founded_year))
             add_w(str(p.founded_year)[-2:])
             
-        # Combinaciones persona + empresa
+        # Person + company combinations
         if fn and comp:
             add_w(f"{fn}{comp}")
             add_w(f"{fn}_{comp}")
@@ -238,15 +238,15 @@ class WordlistEngine:
             cs = self._normalize(p.company_short)
             add_w(f"{fn[0]}{ln}{cs}")
             
-        # Palabras extras
+        # Extra words
         for ew in p.extra_words:
             add_w(ew)
             
-        # Deduplicación preservando orden
+        # Deduplicate while preserving order
         seen = set()
         unique_words = []
         for w in words:
-            if w and w not in seen and len(w) >= 2:  # Mínimo 2 chars
+            if w and w not in seen and len(w) >= 2:  # Minimum 2 chars
                 seen.add(w)
                 unique_words.append(w)
         
@@ -254,7 +254,7 @@ class WordlistEngine:
         return unique_words
 
     def _capitalizations(self, word: str) -> list:
-        """Genera variaciones de capitalización"""
+        """Generate capitalization variants."""
         if not word or len(word) < 1: 
             return []
         variants = [
@@ -268,27 +268,27 @@ class WordlistEngine:
         return list(set(variants))
 
     def _leet_speak_advanced(self, word: str) -> Set[str]:
-        """Leet speak avanzado con múltiples sustituciones por carácter"""
+        """Advanced leet speak with multiple substitutions per character."""
         if not self.profile.leet_enabled or not word:
             return set()
         
         variants = set()
         chars = list(word)
         
-        # Múltiples sustituciones (solo hasta 2 caracteres para no explotar)
+        # Multiple substitutions, limited to avoid combinatorial explosion
         replaceable = [(i, c) for i, c in enumerate(chars) if c.lower() in LEET_MAP]
         
         if not replaceable:
             return variants
         
-        # Una sustitución por carácter
+        # One substitution per character
         for idx, char in replaceable[:3]:  # Limitar a 3 caracteres reemplazables
             for sub in LEET_MAP[char.lower()]:
                 new_word = chars.copy()
                 new_word[idx] = sub
                 variants.add(''.join(new_word))
         
-        # Dos sustituciones (si hay al menos 2 reemplazables)
+        # Two substitutions, if at least 2 characters are replaceable
         if self.profile.leet_advanced and len(replaceable) >= 2:
             for i in range(min(2, len(replaceable))):
                 for j in range(i + 1, min(3, len(replaceable))):
@@ -306,7 +306,7 @@ class WordlistEngine:
         return variants
 
     def _year_suffixes(self, word: str) -> list:
-        """Sufijos con años relevantes"""
+        """Suffixes with relevant years."""
         p = self.profile
         years = set()
         
@@ -326,7 +326,7 @@ class WordlistEngine:
         return variants
 
     def _season_suffixes(self, word: str) -> list:
-        """Sufijos con estaciones (más contextuales)"""
+        """Suffixes with seasonal terms."""
         if not self.profile.seasons_enabled:
             return []
         
@@ -344,7 +344,7 @@ class WordlistEngine:
         return list(variants)
 
     def _special_suffixes(self, word: str) -> list:
-        """Sufijos especiales mejorados"""
+        """Enhanced special suffixes."""
         variants = []
         for cap in self._capitalizations(word):
             for sfx in SPECIAL_SUFFIXES:
@@ -352,7 +352,7 @@ class WordlistEngine:
         return variants
 
     def _number_prefixes(self, word: str) -> list:
-        """Prefijos numéricos"""
+        """Numeric prefixes."""
         variants = []
         for cap in self._capitalizations(word):
             for pfx in SPECIAL_PREFIXES:
@@ -360,14 +360,14 @@ class WordlistEngine:
         return variants
 
     def _combinations(self, base_words: list) -> list:
-        """Combinaciones inteligentes de palabras base"""
+        """Smart combinations of base words."""
         if not self.profile.combinations_enabled:
             return []
         
         variants = set()
-        bw = base_words[:50]  # Aumentado a 50
+        bw = base_words[:50]  # Increased to 50
         
-        # Combinaciones de 2 palabras
+        # 2-word combinations
         for w1, w2 in itertools.permutations(bw, 2):
             if len(w1) + len(w2) <= self.profile.max_length:
                 for sep in SEPARATORS:
@@ -380,7 +380,7 @@ class WordlistEngine:
         return list(variants)
 
     def _filter_and_sort(self, words: Set[str]) -> list:
-        """Filtra y ordena palabras por complejidad"""
+        """Filter and sort words by complexity."""
         filtered = [
             w for w in words 
             if self.profile.min_length <= len(w) <= self.profile.max_length 
@@ -397,7 +397,7 @@ class WordlistEngine:
         return sorted(set(filtered), key=sort_key, reverse=True)
 
     def generate(self, console=None) -> WordlistResult:
-        """Genera wordlist con estrategia de deduplicación configurable"""
+        """Generate wordlist with configurable deduplication strategy."""
         base_words = self._extract_base_words()
         all_words: Set[str] = set(base_words)
         categories = defaultdict(int)
@@ -414,7 +414,7 @@ class WordlistEngine:
             
             task = progress.add_task("[cyan]Processing mutations...", total=8)
 
-            # Capitalizaciones
+            # Capitalizations
             progress.update(task, description="[cyan]Capitalizations...")
             for bw in base_words:
                 caps = self._capitalizations(bw)
@@ -422,7 +422,7 @@ class WordlistEngine:
                 all_words.update(caps)
             progress.advance(task)
 
-            # Leet speak mejorado
+            # Enhanced leet speak
             progress.update(task, description="[cyan]Leet speak (advanced)...")
             for bw in base_words:
                 leets = self._leet_speak_advanced(bw)
@@ -430,7 +430,7 @@ class WordlistEngine:
                 all_words.update(leets)
             progress.advance(task)
 
-            # Sufijos de años
+            # Year suffixes
             progress.update(task, description="[cyan]Year suffixes...")
             for bw in base_words:
                 years = self._year_suffixes(bw)
@@ -438,7 +438,7 @@ class WordlistEngine:
                 all_words.update(years)
             progress.advance(task)
 
-            # Sufijos de estaciones
+            # Season suffixes
             progress.update(task, description="[cyan]Seasons...")
             for bw in base_words:
                 seasons = self._season_suffixes(bw)
@@ -446,7 +446,7 @@ class WordlistEngine:
                 all_words.update(seasons)
             progress.advance(task)
 
-            # Sufijos especiales
+            # Special suffixes
             progress.update(task, description="[cyan]Special suffixes...")
             for bw in base_words:
                 sfx = self._special_suffixes(bw)
@@ -458,18 +458,18 @@ class WordlistEngine:
                 all_words.update(pfx)
             progress.advance(task)
 
-            # Combinaciones
+            # Combinations
             progress.update(task, description="[cyan]Combinations...")
             combos = self._combinations(base_words)
             categories["Combinations"] += len(combos)
             all_words.update(combos)
             progress.advance(task)
 
-            # Filtrado final
+            # Final filtering
             progress.update(task, description="[cyan]Filtering & deduplicating...")
             final_words = self._filter_and_sort(all_words)
             
-            # Aplicar límite máximo
+            # Apply maximum limit
             if len(final_words) > self.profile.max_words:
                 logger.warning(f"Wordlist exceeded max ({len(final_words)} > {self.profile.max_words})")
                 final_words = final_words[:self.profile.max_words]
@@ -480,7 +480,7 @@ class WordlistEngine:
         raw_label = self.profile.company or self.profile.first_name or "target"
         label = re.sub(r'[^\w]', '_', raw_label.lower())[:20]
 
-        # Estadísticas
+        # Statistics
         leet_chars = set()
         for subs in LEET_MAP.values():
             leet_chars.update(subs)
@@ -509,10 +509,10 @@ class WordlistEngine:
         )
 
 # ==========================================
-# EXPORT ENGINE - MEJORADO
+# EXPORT ENGINE - ENHANCED
 # ==========================================
 def export_txt(result: WordlistResult, stdout=False) -> Path:
-    """Exporta a formato TXT estándar (compatible Hashcat, Hydra, etc)"""
+    """Export to standard TXT format, compatible with Hashcat, Hydra, etc."""
     if stdout:
         for w in result.final_words:
             print(w)
@@ -525,33 +525,33 @@ def export_txt(result: WordlistResult, stdout=False) -> Path:
     return path
 
 def export_hashcat_masks(result: WordlistResult) -> Path:
-    """Genera masks de Hashcat automáticamente basados en los datos del perfil"""
+    """Generate Hashcat masks automatically based on profile data."""
     path = REPORTS_DIR / f"masks_{result.label}_{result.timestamp}.hcmask"
     
     masks = set()
     p = result.profile
     
-    # Masks basados en nombres
+    # Name-based masks
     if p.first_name:
         fname = p.first_name[:15]
-        masks.add(f"{fname}?d?d?d?d")  # nombre + 4 dígitos
-        masks.add(f"{fname}?l?l?d")     # nombre + 2 letras + 1 dígito
-        masks.add(f"?u{fname}?d?d")     # mayúscula + nombre + 2 dígitos
+        masks.add(f"{fname}?d?d?d?d")  # name + 4 digits
+        masks.add(f"{fname}?l?l?d")     # name + 2 letters + 1 digit
+        masks.add(f"?u{fname}?d?d")     # uppercase + name + 2 digits
     
-    # Masks basados en empresa
+    # Company-based masks
     if p.company_short:
         company = p.company_short[:8]
         masks.add(f"{company}?d?d?d?d")
         masks.add(f"{company}?l?d?d")
         masks.add(f"{company}!?d?d")
     
-    # Masks basados en años
+    # Year-based masks
     if p.birth_year:
         by = str(p.birth_year)[-2:]
         masks.add(f"?a?a?a?a{by}")
         masks.add(f"{by}?a?a?a?a")
     
-    # Masks genéricos universales
+    # Generic universal masks
     masks.update([
         "?l?l?l?d?d",           # abc12
         "?u?l?l?l?d?d?d",       # Abc1234
@@ -570,7 +570,7 @@ def export_hashcat_masks(result: WordlistResult) -> Path:
     return path
 
 def export_hashcat_rules_advanced(result: WordlistResult) -> Path:
-    """Genera reglas Hashcat dinámicas y avanzadas"""
+    """Generate dynamic and advanced Hashcat rules."""
     path = REPORTS_DIR / f"rules_{result.label}_{result.timestamp}.rule"
     
     rules = [
@@ -586,7 +586,7 @@ def export_hashcat_rules_advanced(result: WordlistResult) -> Path:
         "# ====== YEAR MUTATIONS ======",
     ]
     
-    # Agregar reglas dinámicas para años conocidos
+    # Add dynamic rules for known years
     if result.profile.birth_year:
         by = str(result.profile.birth_year)[-2:]
         rules.extend([f"${ b}${ y}" for b in by for y in by])
@@ -639,7 +639,7 @@ def export_hashcat_rules_advanced(result: WordlistResult) -> Path:
     return path
 
 def export_html_report(result: WordlistResult) -> Path:
-    """Reporte HTML mejorado con estadísticas profundas"""
+    """Enhanced HTML report with deep statistics."""
     path = REPORTS_DIR / f"report_{result.label}_{result.timestamp}.html"
     
     rows = ""
@@ -662,7 +662,7 @@ def export_html_report(result: WordlistResult) -> Path:
         if has_special: badge += '<span class="badge special">S</span>'
         preview_rows += f"<tr><td>{i}</td><td>{w}</td><td>{len(w)}</td><td>{badge}</td></tr>"
 
-    # Reporte de configuración
+    # Configuration report
     config_info = f"""
     <tr><td>Min Length</td><td>{result.profile.min_length}</td></tr>
     <tr><td>Max Length</td><td>{result.profile.max_length}</td></tr>
@@ -789,7 +789,7 @@ john --wordlist=wordlist_{result.label}_{result.timestamp}.txt hashes.txt
     return path
 
 def export_csv(result: WordlistResult) -> Path:
-    """CSV con análisis profundo de cada palabra"""
+    """CSV with deep analysis for each word."""
     path = REPORTS_DIR / f"wordlist_{result.label}_{result.timestamp}.csv"
     
     # Precompile leet chars
@@ -814,7 +814,7 @@ def export_csv(result: WordlistResult) -> Path:
     return path
 
 def export_all_formats(result: WordlistResult) -> Dict[str, Path]:
-    """Exporta todos los formatos en un solo batch"""
+    """Export all formats in a single batch."""
     exports = {
         "txt": export_txt(result),
         "masks": export_hashcat_masks(result),
@@ -825,7 +825,7 @@ def export_all_formats(result: WordlistResult) -> Dict[str, Path]:
     return exports
 
 # ==========================================
-# CLI Y UI - MEJORADO
+# CLI AND UI - ENHANCED
 # ==========================================
 def print_banner(console):
     banner = """
@@ -838,50 +838,50 @@ def print_banner(console):
     console.print(Panel(banner, border_style="green", expand=False))
 
 def interactive_mode(console) -> Profile:
-    console.print(Panel("🔐 INTERACTIVE MODE\nIntroduce los datos conocidos (Enter para dejar vacío)", border_style="green"))
+    console.print(Panel("🔐 INTERACTIVE MODE\nEnter known data (press Enter to leave blank)", border_style="green"))
     
-    console.print("\n[bold green]👤 Datos de la persona (Enter para saltar)[/bold green]")
-    p_fn = input("  Nombre: ").strip() or None
-    p_ln = input("  Apellido: ").strip() or None
-    p_nick = input("  Apodo: ").strip() or None
+    console.print("\n[bold green]👤 Person data (press Enter to skip)[/bold green]")
+    p_fn = input("  First name: ").strip() or None
+    p_ln = input("  Last name: ").strip() or None
+    p_nick = input("  Nickname: ").strip() or None
     
-    p_by = input("  Año nacimiento (ej: 1990): ").strip()
+    p_by = input("  Birth year (e.g., 1990): ").strip()
     p_by = int(p_by) if p_by.isdigit() and 1900 <= int(p_by) <= 2050 else None
     
-    p_bd = input("  Día nacimiento (ej: 15): ").strip() or None
-    p_bm = input("  Mes nacimiento (ej: 03): ").strip() or None
-    p_partner = input("  Nombre pareja: ").strip() or None
-    p_pet = input("  Nombre mascota: ").strip() or None
-    p_child = input("  Nombre hijo/a: ").strip() or None
-    p_city = input("  Ciudad: ").strip() or None
-    p_country = input("  País: ").strip() or None
+    p_bd = input("  Birth day (e.g., 15): ").strip() or None
+    p_bm = input("  Birth month (e.g., 03): ").strip() or None
+    p_partner = input("  Partner name: ").strip() or None
+    p_pet = input("  Pet name: ").strip() or None
+    p_child = input("  Child name: ").strip() or None
+    p_city = input("  City: ").strip() or None
+    p_country = input("  Country: ").strip() or None
     p_hobby = input("  Hobby: ").strip() or None
 
-    console.print("\n[bold cyan]🏢 Datos de empresa (Enter para saltar)[/bold cyan]")
-    c_name = input("  Empresa: ").strip() or None
-    c_short = input("  Abreviatura (ej: TN): ").strip() or None
-    c_domain = input("  Dominio: ").strip() or None
-    c_ind = input("  Industria: ").strip() or None
+    console.print("\n[bold cyan]🏢 Company data (press Enter to skip)[/bold cyan]")
+    c_name = input("  Company: ").strip() or None
+    c_short = input("  Abbreviation (e.g., TN): ").strip() or None
+    c_domain = input("  Domain: ").strip() or None
+    c_ind = input("  Industry: ").strip() or None
     
-    c_fy = input("  Año fundación: ").strip()
+    c_fy = input("  Founded year: ").strip()
     c_fy = int(c_fy) if c_fy.isdigit() and 1900 <= int(c_fy) <= 2050 else None
     
-    c_prod = input("  Producto: ").strip() or None
+    c_prod = input("  Product: ").strip() or None
 
-    console.print("\n[bold magenta]⚙️  Configuración Avanzada[/bold magenta]")
-    extra = input("  Palabras extra (separadas por coma): ").strip()
+    console.print("\n[bold magenta]⚙️  Advanced Configuration[/bold magenta]")
+    extra = input("  Extra words (comma-separated): ").strip()
     extra_words = [w.strip() for w in extra.split(",") if w.strip()]
     
-    min_len_in = input("  Longitud mínima [6]: ").strip()
+    min_len_in = input("  Minimum length [6]: ").strip()
     min_len = int(min_len_in) if min_len_in.isdigit() else 6
     
-    max_len_in = input("  Longitud máxima [20]: ").strip()
+    max_len_in = input("  Maximum length [20]: ").strip()
     max_len = int(max_len_in) if max_len_in.isdigit() else 20
     
-    max_words_in = input("  Máximo de palabras [50000]: ").strip()
+    max_words_in = input("  Maximum words [50000]: ").strip()
     max_words = int(max_words_in) if max_words_in.isdigit() else 50000
     
-    leet_adv = input("  Leet speak avanzado (s/n) [s]: ").strip().lower() != "n"
+    leet_adv = input("  Advanced leet speak (y/n) [y]: ").strip().lower() != "n"
     
     return Profile(
         first_name=p_fn, last_name=p_ln, nickname=p_nick, birth_year=p_by,
@@ -913,49 +913,49 @@ Examples:
         """
     )
     
-    # Modos
-    parser.add_argument("-i", "--interactive", action="store_true", help="Modo interactivo (recomendado)")
-    parser.add_argument("--profile", type=str, help="Cargar perfil desde JSON")
+    # Modes
+    parser.add_argument("-i", "--interactive", action="store_true", help="Interactive mode (recommended)")
+    parser.add_argument("--profile", type=str, help="Load profile from JSON")
     
-    # Persona
-    parser.add_argument("--name", type=str, help="Nombre")
-    parser.add_argument("--lastname", type=str, help="Apellido")
-    parser.add_argument("--nickname", type=str, help="Apodo")
-    parser.add_argument("--birth-year", type=int, help="Año nacimiento")
-    parser.add_argument("--birth-day", type=str, help="Día nacimiento")
-    parser.add_argument("--birth-month", type=str, help="Mes nacimiento")
-    parser.add_argument("--partner", type=str, help="Nombre pareja")
-    parser.add_argument("--pet", type=str, help="Nombre mascota")
-    parser.add_argument("--child", type=str, help="Nombre hijo/a")
-    parser.add_argument("--city", type=str, help="Ciudad")
-    parser.add_argument("--country", type=str, help="País")
+    # Person
+    parser.add_argument("--name", type=str, help="First name")
+    parser.add_argument("--lastname", type=str, help="Last name")
+    parser.add_argument("--nickname", type=str, help="Nickname")
+    parser.add_argument("--birth-year", type=int, help="Birth year")
+    parser.add_argument("--birth-day", type=str, help="Birth day")
+    parser.add_argument("--birth-month", type=str, help="Birth month")
+    parser.add_argument("--partner", type=str, help="Partner name")
+    parser.add_argument("--pet", type=str, help="Pet name")
+    parser.add_argument("--child", type=str, help="Child name")
+    parser.add_argument("--city", type=str, help="City")
+    parser.add_argument("--country", type=str, help="Country")
     parser.add_argument("--hobby", type=str, help="Hobby")
     
-    # Empresa
-    parser.add_argument("--company", type=str, help="Nombre empresa")
-    parser.add_argument("--company-short", type=str, help="Abreviatura empresa")
-    parser.add_argument("--domain", type=str, help="Dominio")
-    parser.add_argument("--industry", type=str, help="Industria")
-    parser.add_argument("--founded", type=int, help="Año fundación")
-    parser.add_argument("--product", type=str, help="Producto")
+    # Company
+    parser.add_argument("--company", type=str, help="Company name")
+    parser.add_argument("--company-short", type=str, help="Company abbreviation")
+    parser.add_argument("--domain", type=str, help="Domain")
+    parser.add_argument("--industry", type=str, help="Industry")
+    parser.add_argument("--founded", type=int, help="Founded year")
+    parser.add_argument("--product", type=str, help="Product")
     
     # Config
-    parser.add_argument("--extra-words", type=str, help="Palabras extra (comas)")
-    parser.add_argument("--min-length", type=int, default=6, help="Longitud mínima (default: 6)")
-    parser.add_argument("--max-length", type=int, default=20, help="Longitud máxima (default: 20)")
-    parser.add_argument("--max-words", type=int, default=50000, help="Máximo de palabras (default: 50000)")
-    parser.add_argument("--leet-advanced", action="store_true", help="Leet speak avanzado (múltiples sustituciones)")
-    parser.add_argument("--no-leet", action="store_true", help="Deshabilitar leet speak")
-    parser.add_argument("--no-seasons", action="store_true", help="Deshabilitar mutaciones de estaciones")
-    parser.add_argument("--no-combinations", action="store_true", help="Deshabilitar combinaciones")
+    parser.add_argument("--extra-words", type=str, help="Extra words (comma-separated)")
+    parser.add_argument("--min-length", type=int, default=6, help="Minimum length (default: 6)")
+    parser.add_argument("--max-length", type=int, default=20, help="Maximum length (default: 20)")
+    parser.add_argument("--max-words", type=int, default=50000, help="Maximum words (default: 50000)")
+    parser.add_argument("--leet-advanced", action="store_true", help="Advanced leet speak (multiple substitutions)")
+    parser.add_argument("--no-leet", action="store_true", help="Disable leet speak")
+    parser.add_argument("--no-seasons", action="store_true", help="Disable seasonal mutations")
+    parser.add_argument("--no-combinations", action="store_true", help="Disable combinations")
     
-    # Salida
+    # Output
     parser.add_argument("--export", type=str, default="txt", choices=["txt", "rules", "masks", "html", "csv", "all"],
-                       help="Formato de exportación (default: txt)")
-    parser.add_argument("--output", type=str, default="reports/", help="Directorio de salida (default: reports/)")
-    parser.add_argument("--stdout", action="store_true", help="Enviar wordlist a stdout (útil para piping)")
-    parser.add_argument("--quiet", action="store_true", help="Modo silencioso (sin banner ni tablas)")
-    parser.add_argument("--preview", type=int, default=20, help="Número de palabras a previsualizar (default: 20)")
+                       help="Export format (default: txt)")
+    parser.add_argument("--output", type=str, default="reports/", help="Output directory (default: reports/)")
+    parser.add_argument("--stdout", action="store_true", help="Send wordlist to stdout (useful for piping)")
+    parser.add_argument("--quiet", action="store_true", help="Silent mode (no banner or tables)")
+    parser.add_argument("--preview", type=int, default=20, help="Number of words to preview (default: 20)")
     
     args = parser.parse_args()
     console = Console()
@@ -963,12 +963,12 @@ Examples:
     if not args.quiet:
         print_banner(console)
 
-    # Cargar perfil
+    # Load profile
     profile = None
     try:
         if args.interactive:
             profile = interactive_mode(console)
-            export_fmt = input("  Exportar como (txt/rules/masks/html/csv/all) [txt]: ").strip() or "txt"
+            export_fmt = input("  Export as (txt/rules/masks/html/csv/all) [txt]: ").strip() or "txt"
             args.export = export_fmt
         elif args.profile:
             with open(args.profile, "r", encoding="utf-8") as f:
@@ -994,12 +994,12 @@ Examples:
         logger.error(f"Profile loading failed: {e}", exc_info=True)
         sys.exit(1)
 
-    # Validar datos mínimos
+    # Validate minimum data
     if not any([profile.first_name, profile.last_name, profile.company, profile.domain, profile.extra_words]):
-        console.print("[bold red]❌ Error: Debes proveer al menos un dato útil (nombre, empresa, dominio o extra-words)[/bold red]")
+        console.print("[bold red]❌ Error: You must provide at least one useful value (name, company, domain, or extra words)[/bold red]")
         sys.exit(1)
 
-    # Resumen
+    # Summary
     label_target = profile.company or profile.first_name or "Target"
     
     muts = ["cap"]
@@ -1033,12 +1033,12 @@ Examples:
                 table.add_row(str(i), w, str(len(w)))
             console.print(table)
 
-        # Estadísticas
+        # Statistics
         if not args.quiet:
             stats_text = f"📊 [Total: [bold green]{result.total_count:,}[/bold green]] [Base: {len(result.base_words)}] [Range: {profile.min_length}-{profile.max_length}]"
             console.print(Panel(stats_text, border_style="blue", expand=False))
 
-        # Exportar
+        # Export
         fmt = args.export.lower()
         exported_files = []
         
@@ -1075,7 +1075,7 @@ Examples:
             console.print(f"[bold red]❌ Export error: {e}[/bold red]")
             logger.error(f"Export failed: {e}", exc_info=True)
 
-        # Instrucciones finales
+        # Final instructions
         if not args.quiet:
             instr = f"""
 [bold cyan]🚀 Quick Start:[/bold cyan]
