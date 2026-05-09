@@ -162,7 +162,9 @@ hashcat -m 1000 -a 3 hashes.txt -hm reports/masks_*.hcmask
 --birth-month MM         Mes de nacimiento (01-12)
 --partner TEXT           Nombre de pareja/cónyuge
 --pet TEXT               Nombre de mascota
+--pets TEXT              Nombres de mascotas separados por comas
 --child TEXT             Nombre de hijo/a
+--children TEXT          Nombres de hijos/as separados por comas
 --city TEXT              Ciudad
 --country TEXT           País
 --hobby TEXT             Hobby/interés

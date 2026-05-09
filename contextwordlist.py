@@ -99,7 +99,9 @@ class Profile:
     birth_month:   Optional[str] = None
     partner_name:  Optional[str] = None
     pet_name:      Optional[str] = None
+    pet_names:     list = field(default_factory=list)
     child_name:    Optional[str] = None
+    child_names:   list = field(default_factory=list)
     city:          Optional[str] = None
     country:       Optional[str] = None
     hobby:         Optional[str] = None
@@ -205,7 +207,11 @@ class WordlistEngine:
             
         add_w(p.partner_name)
         add_w(p.pet_name)
+        for pet in p.pet_names:
+            add_w(pet)
         add_w(p.child_name)
+        for child in p.child_names:
+            add_w(child)
         add_w(p.city)
         add_w(p.country)
         add_w(p.hobby)
@@ -839,6 +845,14 @@ def print_banner(console):
 
 def interactive_mode(console) -> Profile:
     console.print(Panel("🔐 INTERACTIVE MODE\nEnter known data (press Enter to leave blank)", border_style="green"))
+
+    def collect_multiple(label, count=5):
+        values = []
+        for idx in range(1, count + 1):
+            value = input(f"  {label} #{idx}: ").strip()
+            if value:
+                values.append(value)
+        return values
     
     console.print("\n[bold green]👤 Person data (press Enter to skip)[/bold green]")
     p_fn = input("  First name: ").strip() or None
@@ -851,8 +865,8 @@ def interactive_mode(console) -> Profile:
     p_bd = input("  Birth day (e.g., 15): ").strip() or None
     p_bm = input("  Birth month (e.g., 03): ").strip() or None
     p_partner = input("  Partner name: ").strip() or None
-    p_pet = input("  Pet name: ").strip() or None
-    p_child = input("  Child name: ").strip() or None
+    p_pets = collect_multiple("Pet name", 5)
+    p_children = collect_multiple("Child name", 5)
     p_city = input("  City: ").strip() or None
     p_country = input("  Country: ").strip() or None
     p_hobby = input("  Hobby: ").strip() or None
@@ -885,8 +899,10 @@ def interactive_mode(console) -> Profile:
     
     return Profile(
         first_name=p_fn, last_name=p_ln, nickname=p_nick, birth_year=p_by,
-        birth_day=p_bd, birth_month=p_bm, partner_name=p_partner, pet_name=p_pet,
-        child_name=p_child, city=p_city, country=p_country, hobby=p_hobby,
+        birth_day=p_bd, birth_month=p_bm, partner_name=p_partner,
+        pet_name=p_pets[0] if p_pets else None, pet_names=p_pets,
+        child_name=p_children[0] if p_children else None, child_names=p_children,
+        city=p_city, country=p_country, hobby=p_hobby,
         company=c_name, company_short=c_short, domain=c_domain, industry=c_ind,
         founded_year=c_fy, product=c_prod,
         extra_words=extra_words, min_length=min_len, max_length=max_len,
@@ -926,7 +942,9 @@ Examples:
     parser.add_argument("--birth-month", type=str, help="Birth month")
     parser.add_argument("--partner", type=str, help="Partner name")
     parser.add_argument("--pet", type=str, help="Pet name")
+    parser.add_argument("--pets", type=str, help="Pet names (comma-separated)")
     parser.add_argument("--child", type=str, help="Child name")
+    parser.add_argument("--children", type=str, help="Child names (comma-separated)")
     parser.add_argument("--city", type=str, help="City")
     parser.add_argument("--country", type=str, help="Country")
     parser.add_argument("--hobby", type=str, help="Hobby")
@@ -977,10 +995,18 @@ Examples:
                 logger.info(f"Profile loaded from {args.profile}")
         else:
             extra = [w.strip() for w in args.extra_words.split(",")] if args.extra_words else []
+            pet_names = [w.strip() for w in args.pets.split(",") if w.strip()] if args.pets else []
+            child_names = [w.strip() for w in args.children.split(",") if w.strip()] if args.children else []
+            if args.pet:
+                pet_names.insert(0, args.pet)
+            if args.child:
+                child_names.insert(0, args.child)
             profile = Profile(
                 first_name=args.name, last_name=args.lastname, nickname=args.nickname,
                 birth_year=args.birth_year, birth_day=args.birth_day, birth_month=args.birth_month,
-                partner_name=args.partner, pet_name=args.pet, child_name=args.child,
+                partner_name=args.partner,
+                pet_name=pet_names[0] if pet_names else None, pet_names=pet_names,
+                child_name=child_names[0] if child_names else None, child_names=child_names,
                 city=args.city, country=args.country, hobby=args.hobby,
                 company=args.company, company_short=args.company_short, domain=args.domain,
                 industry=args.industry, founded_year=args.founded, product=args.product,

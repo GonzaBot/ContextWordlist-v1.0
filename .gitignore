@@ -90,6 +90,7 @@ secrets.json
 # Profile Files (Development only)
 *.json
 profile_*.json
+!examples/profile_template.json
 
 # Databases
 *.db
